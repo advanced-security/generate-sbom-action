@@ -20,7 +20,8 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: ./
-        name: gensbom
+        id: gensbom
+        name: Generate the SBOM
       - run: ls -la
       - run: echo ${{ steps.gensbom.outputs.fileName }}
       - uses: actions/upload-artifact@v3

@@ -16,7 +16,7 @@ gen-sbom:
   steps:
   - uses: actions/checkout@v3
   - uses: colindemobvsky/generate-sbom-action@v1
-    name: gensbom
+    id: gensbom
   - uses: actions/upload-artifact@v3
     with:
       name: sbom
