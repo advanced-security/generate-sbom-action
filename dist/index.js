@@ -1,7 +1,7 @@
 require('./sourcemap-register.js');/******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
-/***/ 8996:
+/***/ 9586:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
@@ -53,14 +53,14 @@ function generateSBOM(token, owner, repo, sha) {
             auth: token
         });
         const res = yield octokit.request('GET /repos/{owner}/{repo}/dependency-graph/sbom', {
-            owner: owner,
-            repo: repo,
+            owner,
+            repo,
             headers: {
                 'X-GitHub-Api-Version': '2022-11-28'
             }
         });
         const fileName = `sbom-${owner}-${repo}-${sha}.json`;
-        yield fs_1.default.writeFile(fileName, JSON.stringify(res.data.sbom), (err) => {
+        fs_1.default.writeFile(fileName, JSON.stringify(res.data.sbom), err => {
             if (err) {
                 const e = (0, utils_1.wrapError)(err);
                 core.setFailed(e.message);
@@ -116,7 +116,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__nccwpck_require__(2186));
-const generateSBOM_1 = __nccwpck_require__(8996);
+const generate_sbom_1 = __nccwpck_require__(9586);
 const utils_1 = __nccwpck_require__(918);
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
@@ -126,7 +126,7 @@ function run() {
             const [owner, repo] = repo_owner.split('/');
             const sha = (0, utils_1.getRequiredEnvParam)('GITHUB_SHA');
             core.debug(new Date().toTimeString());
-            yield (0, generateSBOM_1.generateSBOM)(token, owner, repo, sha);
+            yield (0, generate_sbom_1.generateSBOM)(token, owner, repo, sha);
             core.debug(new Date().toTimeString());
         }
         catch (error) {
