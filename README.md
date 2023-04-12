@@ -20,5 +20,5 @@ gen-sbom:
   - uses: actions/upload-artifact@v3
     with:
       name: sbom
-      path: ${{ steps.gensbom.outputs.filename }}
+      path: ${{ steps.gensbom.outputs.fileName }}
 ```
