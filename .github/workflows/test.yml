@@ -22,6 +22,7 @@ jobs:
       - uses: ./
         name: gensbom
       - run: ls -la
+      - run: echo ${{ steps.gensbom.outputs.fileName }}
       - uses: actions/upload-artifact@v3
         with:
           name: sbom
