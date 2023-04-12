@@ -4,7 +4,7 @@
 
 # Generate SBOM Action
 
-This action uses the REST API call to generate the SBOM for the repo (on the default branch). You can then use the `filename` output to upload the file as an artifact. 
+This action uses the REST API call to generate the SBOM for the repo (on the default branch). You can then use the `fileName` output to upload the file as an artifact. 
 
 ## Usage
 
