@@ -20,5 +20,8 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: ./
+        name: gensbom
+      - uses: actions/upload-artifact@v3
         with:
-          milliseconds: 1000
+          name: sbom
+          path: ${{ steps.gensbom.outputs.filename }}
