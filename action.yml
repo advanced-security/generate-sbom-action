@@ -1,6 +1,9 @@
 name: 'Generate SBOM'
 description: 'Generate an SBOM via the REST API'
 author: 'Colin Dembovsky'
+branding:
+  color: green
+  icon: shield
 inputs:
   token:
     required: false
