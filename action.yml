@@ -1,11 +1,14 @@
-name: 'Your name here'
-description: 'Provide a description here'
-author: 'Your name or organization here'
+name: 'Generate SBOM'
+description: 'Generate an SBOM via the REST API'
+author: 'Colin Dembovsky'
 inputs:
-  milliseconds: # change this
-    required: true
-    description: 'input description here'
-    default: 'default value if applicable'
+  token:
+    required: false
+    description: 'GitHub token with permissions to read SBOM'
+    default: ${{ github.token }}
+outputs:
+  fileName:
+    description: The filename of the SBOM generated
 runs:
   using: 'node16'
   main: 'dist/index.js'
