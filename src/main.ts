@@ -10,10 +10,8 @@ async function run(): Promise<void> {
     const sha = getRequiredEnvParam('GITHUB_SHA');
     
     core.debug(new Date().toTimeString());
-    const fileName = await generateSBOM(token, owner, repo, sha);
+    await generateSBOM(token, owner, repo, sha);
     core.debug(new Date().toTimeString());
-
-    core.setOutput('fileName', fileName);
   } catch (error) {
     core.setFailed(wrapError(error).message);
   }

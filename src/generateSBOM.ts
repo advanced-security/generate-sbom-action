@@ -3,12 +3,12 @@ import { Octokit } from "octokit";
 import fs from 'fs';
 import { wrapError } from './utils';
 
-export async function generateSBOM(token: string, owner: string, repo: string, sha: string): Promise<string> {
+export async function generateSBOM(token: string, owner: string, repo: string, sha: string): Promise<void> {
   const octokit = new Octokit({
     auth: token
   });
 
-  const data = await octokit.request('GET /repos/{owner}/{repo}/dependency-graph/sbom', {
+  const res = await octokit.request('GET /repos/{owner}/{repo}/dependency-graph/sbom', {
     owner: owner,
     repo: repo,
     headers: {
@@ -17,14 +17,13 @@ export async function generateSBOM(token: string, owner: string, repo: string, s
   });
 
   const fileName = `sbom-${owner}-${repo}-${sha}.json`;
-  await fs.writeFile(fileName, <any>data, (err) => {
+  await fs.writeFile(fileName, JSON.stringify((<any>res).data.sbom), (err) => {
     if (err) {
       const e = wrapError(err);
       core.setFailed(e.message);
     } else {
+      core.setOutput('fileName', fileName);
       core.info(`SBOM written to ${fileName}`);
     }
   });
-
-  return fileName;
 }
