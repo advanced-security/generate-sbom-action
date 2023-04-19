@@ -15,7 +15,7 @@ gen-sbom:
   runs-on: ubuntu-latest
   steps:
   - uses: actions/checkout@v3
-  - uses: colindemobvsky/generate-sbom-action@v1
+  - uses: advanced-security/generate-sbom-action@v1
     id: gensbom
   - uses: actions/upload-artifact@v3
     with:
