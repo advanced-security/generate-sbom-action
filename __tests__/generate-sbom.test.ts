@@ -1,10 +1,12 @@
 import { Octokit } from '@octokit/core';
 import {describe, expect } from '@jest/globals';
 import { generateSBOM } from '../src/generate-sbom';
-import { mockSBOM } from './mock-sbom';
 import fs from 'fs';
 
+const mockSBOM = fs.readFileSync("./__tests__/mock-sbom.json", "utf-8");
+
 jest.spyOn(fs, 'writeFile').mockImplementation((f, d, callback) => {
+  console.log("[mock] writing file");
   callback(null);
 });
 
