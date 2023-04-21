@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="https://github.com/colindembovsky/generate-sbom-action"><img alt="test status" src="https://github.com/colindembovsky/generate-sbom-action/actions/workflows/test.yml/badge.svg"></a>
+  <a href="https://github.com/advanced-security/generate-sbom-action"><img alt="test status" src="https://github.com/advanced-security/generate-sbom-action/actions/workflows/test.yml/badge.svg"></a>
 </p>
 
 # Generate SBOM Action
