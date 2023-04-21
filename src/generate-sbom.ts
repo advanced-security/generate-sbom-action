@@ -8,9 +8,9 @@ export async function generateSBOM(
   owner: string,
   repo: string,
   sha: string,
-  octokit?: Octokit,
+  octokit?: Octokit
 ): Promise<void> {
-  const kit = octokit || new Octokit({auth: token});
+  const kit = octokit || new Octokit({auth: token})
 
   const res = await kit.request(
     'GET /repos/{owner}/{repo}/dependency-graph/sbom',
