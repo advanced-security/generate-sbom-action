@@ -47,12 +47,10 @@ const core = __importStar(__nccwpck_require__(2186));
 const octokit_1 = __nccwpck_require__(7467);
 const fs_1 = __importDefault(__nccwpck_require__(7147));
 const utils_1 = __nccwpck_require__(918);
-function generateSBOM(token, owner, repo, sha) {
+function generateSBOM(token, owner, repo, sha, octokit) {
     return __awaiter(this, void 0, void 0, function* () {
-        const octokit = new octokit_1.Octokit({
-            auth: token
-        });
-        const res = yield octokit.request('GET /repos/{owner}/{repo}/dependency-graph/sbom', {
+        const kit = octokit || new octokit_1.Octokit({ auth: token });
+        const res = yield kit.request('GET /repos/{owner}/{repo}/dependency-graph/sbom', {
             owner,
             repo,
             headers: {
