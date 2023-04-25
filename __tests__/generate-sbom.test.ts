@@ -23,7 +23,7 @@ describe('generateSBOMForRepo', () => {
       }
     })
 
-    await generateSBOM(<any>octokit, owner, repo)
+    await generateSBOM(owner, repo, <any>octokit, 'repo')
 
     expect(octokit.request).toHaveBeenCalledWith(
       'GET /repos/{owner}/{repo}/dependency-graph/sbom',

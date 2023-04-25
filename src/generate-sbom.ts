@@ -34,7 +34,7 @@ export async function createRepoList(
 
   if (typeof repo !== 'undefined') {
     core.info(`repo name: ${owner}/${repo}`)
-    await generateSBOM(kit, owner, repo, 'repo')
+    await generateSBOM(owner, repo, kit, 'repo')
   } else {
     core.info(`org name: ${owner}`)
     const repos = await kit.paginate(kit.rest.repos.listForOrg, {
@@ -43,15 +43,15 @@ export async function createRepoList(
     core.info(`Found ${repos.length} repos`)
     for (const repo of repos) {
       core.info(`repo name: ${repo.name}`)
-      await generateSBOM(kit, owner, repo.name, 'org')
+      await generateSBOM(owner, repo.name, kit, 'org')
     }
   }
 }
 
 export async function generateSBOM(
-  kit: Octokit,
   owner: string,
   repo: string,
+  kit: Octokit,
   type?: string
 ): Promise<void> {
 

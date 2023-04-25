@@ -62,7 +62,7 @@ function createRepoList(token, owner, repo, octokit) {
         });
         if (typeof repo !== 'undefined') {
             core.info(`repo name: ${owner}/${repo}`);
-            yield generateSBOM(kit, owner, repo, 'repo');
+            yield generateSBOM(owner, repo, kit, 'repo');
         }
         else {
             core.info(`org name: ${owner}`);
@@ -72,13 +72,13 @@ function createRepoList(token, owner, repo, octokit) {
             core.info(`Found ${repos.length} repos`);
             for (const repo of repos) {
                 core.info(`repo name: ${repo.name}`);
-                yield generateSBOM(kit, owner, repo.name, 'org');
+                yield generateSBOM(owner, repo.name, kit, 'org');
             }
         }
     });
 }
 exports.createRepoList = createRepoList;
-function generateSBOM(kit, owner, repo, type) {
+function generateSBOM(owner, repo, kit, type) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const res = yield kit.request('GET /repos/{owner}/{repo}/dependency-graph/sbom', {
