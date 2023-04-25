@@ -42,24 +42,24 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.generateSBOM = exports.createRepoList = void 0;
 const core = __importStar(__nccwpck_require__(2186));
 const octokit_1 = __nccwpck_require__(7467);
-const { throttling } = __nccwpck_require__(9968);
 const fs = __importStar(__nccwpck_require__(7147));
 const utils_1 = __nccwpck_require__(918);
 function createRepoList(token, owner, repo, octokit) {
     return __awaiter(this, void 0, void 0, function* () {
-        const kit = octokit || new octokit_1.Octokit({
-            auth: token,
-            throttle: {
-                onRateLimit: (retryAfter, options, _o) => {
-                    core.setFailed(`Request quota exhausted for request ${options.method} ${options.url}. Retry after: ${retryAfter} seconds.`);
-                    process.exit(1);
-                },
-                onSecondaryRateLimit: (_retryAfter, options) => {
-                    core.setFailed(`SecondaryRateLimit detected for request ${options.method} ${options.url}`);
-                    process.exit(1);
+        const kit = octokit ||
+            new octokit_1.Octokit({
+                auth: token,
+                throttle: {
+                    onRateLimit: (retryAfter, options) => {
+                        core.setFailed(`Request quota exhausted for request ${options.method} ${options.url}. Retry after: ${retryAfter} seconds.`);
+                        process.exit(1);
+                    },
+                    onSecondaryRateLimit: (_retryAfter, options) => {
+                        core.setFailed(`SecondaryRateLimit detected for request ${options.method} ${options.url}`);
+                        process.exit(1);
+                    }
                 }
-            }
-        });
+            });
         if (typeof repo !== 'undefined') {
             core.info(`repo name: ${owner}/${repo}`);
             yield generateSBOM(owner, repo, kit, 'repo');
@@ -70,9 +70,9 @@ function createRepoList(token, owner, repo, octokit) {
                 org: owner
             });
             core.info(`Found ${repos.length} repos`);
-            for (const repo of repos) {
-                core.info(`repo name: ${repo.name}`);
-                yield generateSBOM(owner, repo.name, kit, 'org');
+            for (const orgRepo of repos) {
+                core.info(`repo name: ${orgRepo.name}`);
+                yield generateSBOM(owner, orgRepo.name, kit, 'org');
             }
         }
     });

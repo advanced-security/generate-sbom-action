@@ -1,8 +1,13 @@
 import * as core from '@actions/core'
-import { Octokit } from 'octokit'
-const { throttling } = require("@octokit/plugin-throttling");
+import {Octokit} from 'octokit'
 import * as fs from 'fs'
-import { wrapError } from './utils'
+import {wrapError} from './utils'
+
+type ThrottleOptions = {
+  method: string
+  url: string
+  request: {retryCount: number}
+}
 
 export async function createRepoList(
   token: string,
@@ -10,27 +15,28 @@ export async function createRepoList(
   repo: string,
   octokit?: Octokit
 ): Promise<void> {
-  const kit = octokit || new Octokit({ 
-    auth: token,
-    throttle: {
-      onRateLimit: (
-        retryAfter: number,
-        options: any,
-        _o: Octokit,
-      ) => {
-        core.setFailed(
-          `Request quota exhausted for request ${options.method} ${options.url}. Retry after: ${retryAfter} seconds.`
-        )
-        process.exit(1);
-      },
-      onSecondaryRateLimit: (_retryAfter: number, options: any) => {
-        core.setFailed(
-          `SecondaryRateLimit detected for request ${options.method} ${options.url}`
-        )
-        process.exit(1);
+  const kit =
+    octokit ||
+    new Octokit({
+      auth: token,
+      throttle: {
+        onRateLimit: (retryAfter: number, options: ThrottleOptions) => {
+          core.setFailed(
+            `Request quota exhausted for request ${options.method} ${options.url}. Retry after: ${retryAfter} seconds.`
+          )
+          process.exit(1)
+        },
+        onSecondaryRateLimit: (
+          _retryAfter: number,
+          options: ThrottleOptions
+        ) => {
+          core.setFailed(
+            `SecondaryRateLimit detected for request ${options.method} ${options.url}`
+          )
+          process.exit(1)
+        }
       }
-    }
-  })
+    })
 
   if (typeof repo !== 'undefined') {
     core.info(`repo name: ${owner}/${repo}`)
@@ -41,9 +47,9 @@ export async function createRepoList(
       org: owner
     })
     core.info(`Found ${repos.length} repos`)
-    for (const repo of repos) {
-      core.info(`repo name: ${repo.name}`)
-      await generateSBOM(owner, repo.name, kit, 'org')
+    for (const orgRepo of repos) {
+      core.info(`repo name: ${orgRepo.name}`)
+      await generateSBOM(owner, orgRepo.name, kit, 'org')
     }
   }
 }
@@ -54,7 +60,6 @@ export async function generateSBOM(
   kit: Octokit,
   type?: string
 ): Promise<void> {
-
   try {
     const res = await kit.request(
       'GET /repos/{owner}/{repo}/dependency-graph/sbom',
@@ -82,6 +87,8 @@ export async function generateSBOM(
       }
     })
   } catch (error) {
-    core.warning(`Failed to export SBOM for: ${repo} (is Dependency Graph enabled?)`)
+    core.warning(
+      `Failed to export SBOM for: ${repo} (is Dependency Graph enabled?)`
+    )
   }
 }
