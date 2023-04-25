@@ -10,12 +10,11 @@ jest.spyOn(fs, 'writeFile').mockImplementation((f, d, callback) => {
   callback(null)
 })
 
-describe('generateSBOM', () => {
+describe('generateSBOMForRepo', () => {
   it('should retrieve the SBOM for a repository', async () => {
     const token = 'test-token'
-    const owner = 'octocat'
-    const repo = 'hello-world'
-    const sha = 'fe43fdf'
+    const resource = 'octocat/hello-world'
+    const [owner, repo] = resource.split('/')
 
     const octokit = new Octokit()
     ;(<any>octokit).request = jest.fn().mockResolvedValue({
@@ -24,7 +23,7 @@ describe('generateSBOM', () => {
       }
     })
 
-    await generateSBOM(token, owner, repo, sha, <any>octokit)
+    await generateSBOM(<any>octokit, owner, repo)
 
     expect(octokit.request).toHaveBeenCalledWith(
       'GET /repos/{owner}/{repo}/dependency-graph/sbom',
@@ -38,7 +37,7 @@ describe('generateSBOM', () => {
     )
 
     expect(fs.writeFile).toHaveBeenCalledWith(
-      `sbom-${owner}-${repo}-${sha}.json`,
+      `sbom-${owner}-${repo}.json`,
       JSON.stringify(mockSBOM),
       expect.any(Function)
     )

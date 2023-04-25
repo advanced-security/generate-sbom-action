@@ -38,36 +38,69 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.generateSBOM = void 0;
+exports.generateSBOM = exports.createRepoList = void 0;
 const core = __importStar(__nccwpck_require__(2186));
 const octokit_1 = __nccwpck_require__(7467);
-const fs_1 = __importDefault(__nccwpck_require__(7147));
+const { throttling } = __nccwpck_require__(9968);
+const fs = __importStar(__nccwpck_require__(7147));
 const utils_1 = __nccwpck_require__(918);
-function generateSBOM(token, owner, repo, sha, octokit) {
+function createRepoList(token, owner, repo, octokit) {
     return __awaiter(this, void 0, void 0, function* () {
-        const kit = octokit || new octokit_1.Octokit({ auth: token });
-        const res = yield kit.request('GET /repos/{owner}/{repo}/dependency-graph/sbom', {
-            owner,
-            repo,
-            headers: {
-                'X-GitHub-Api-Version': '2022-11-28'
+        const kit = octokit || new octokit_1.Octokit({
+            auth: token,
+            throttle: {
+                onRateLimit: (retryAfter, options, _o) => {
+                    core.setFailed(`Request quota exhausted for request ${options.method} ${options.url}. Retry after: ${retryAfter} seconds.`);
+                    process.exit(1);
+                },
+                onSecondaryRateLimit: (_retryAfter, options) => {
+                    core.setFailed(`SecondaryRateLimit detected for request ${options.method} ${options.url}`);
+                }
             }
         });
-        const fileName = `sbom-${owner}-${repo}-${sha}.json`;
-        fs_1.default.writeFile(fileName, JSON.stringify(res.data.sbom), err => {
-            if (err) {
-                const e = (0, utils_1.wrapError)(err);
-                core.setFailed(e.message);
+        if (typeof repo !== 'undefined') {
+            core.info(`repo name: ${owner}/${repo}`);
+            yield generateSBOM(kit, owner, repo);
+        }
+        else {
+            core.info(`org name: ${owner}`);
+            const repos = yield kit.paginate(kit.rest.repos.listForOrg, {
+                org: owner
+            });
+            core.info(`Found ${repos.length} repos`);
+            for (const repo of repos) {
+                core.info(`repo name: ${repo.name}`);
+                yield generateSBOM(kit, owner, repo.name);
             }
-            else {
-                core.setOutput('fileName', fileName);
-                core.info(`SBOM written to ${fileName}`);
-            }
-        });
+        }
+    });
+}
+exports.createRepoList = createRepoList;
+function generateSBOM(kit, owner, repo) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            const res = yield kit.request('GET /repos/{owner}/{repo}/dependency-graph/sbom', {
+                owner,
+                repo,
+                headers: {
+                    'X-GitHub-Api-Version': '2022-11-28'
+                }
+            });
+            const fileName = `sbom-${owner}-${repo}.json`;
+            fs.writeFile(fileName, JSON.stringify(res.data.sbom), err => {
+                if (err) {
+                    const e = (0, utils_1.wrapError)(err);
+                    core.setFailed(e.message);
+                }
+                else {
+                    core.info(`SBOM written to ${fileName}`);
+                }
+            });
+        }
+        catch (error) {
+            core.warning(`Failed to export SBOM for: ${repo} (is Dependency Graph enabled?)`);
+        }
     });
 }
 exports.generateSBOM = generateSBOM;
@@ -120,11 +153,10 @@ function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const token = core.getInput('token');
-            const repo_owner = (0, utils_1.getRequiredEnvParam)('GITHUB_REPOSITORY');
-            const [owner, repo] = repo_owner.split('/');
-            const sha = (0, utils_1.getRequiredEnvParam)('GITHUB_SHA');
+            const resource = core.getInput('resource');
+            const [owner, repo] = resource.split('/');
             core.debug(new Date().toTimeString());
-            yield (0, generate_sbom_1.generateSBOM)(token, owner, repo, sha);
+            yield (0, generate_sbom_1.createRepoList)(token, owner, repo);
             core.debug(new Date().toTimeString());
         }
         catch (error) {
