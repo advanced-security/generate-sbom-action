@@ -56,12 +56,13 @@ function createRepoList(token, owner, repo, octokit) {
                 },
                 onSecondaryRateLimit: (_retryAfter, options) => {
                     core.setFailed(`SecondaryRateLimit detected for request ${options.method} ${options.url}`);
+                    process.exit(1);
                 }
             }
         });
         if (typeof repo !== 'undefined') {
             core.info(`repo name: ${owner}/${repo}`);
-            yield generateSBOM(kit, owner, repo);
+            yield generateSBOM(kit, owner, repo, 'repo');
         }
         else {
             core.info(`org name: ${owner}`);
@@ -71,13 +72,13 @@ function createRepoList(token, owner, repo, octokit) {
             core.info(`Found ${repos.length} repos`);
             for (const repo of repos) {
                 core.info(`repo name: ${repo.name}`);
-                yield generateSBOM(kit, owner, repo.name);
+                yield generateSBOM(kit, owner, repo.name, 'org');
             }
         }
     });
 }
 exports.createRepoList = createRepoList;
-function generateSBOM(kit, owner, repo) {
+function generateSBOM(kit, owner, repo, type) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const res = yield kit.request('GET /repos/{owner}/{repo}/dependency-graph/sbom', {
@@ -94,6 +95,12 @@ function generateSBOM(kit, owner, repo) {
                     core.setFailed(e.message);
                 }
                 else {
+                    if (type === 'repo') {
+                        core.setOutput('fileName', fileName);
+                    }
+                    else if (type === 'org') {
+                        core.setOutput('fileName', `sbom-${owner}-*.json`);
+                    }
                     core.info(`SBOM written to ${fileName}`);
                 }
             });

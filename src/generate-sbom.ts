@@ -27,13 +27,14 @@ export async function createRepoList(
         core.setFailed(
           `SecondaryRateLimit detected for request ${options.method} ${options.url}`
         )
+        process.exit(1);
       }
     }
   })
 
   if (typeof repo !== 'undefined') {
     core.info(`repo name: ${owner}/${repo}`)
-    await generateSBOM(kit, owner, repo)
+    await generateSBOM(kit, owner, repo, 'repo')
   } else {
     core.info(`org name: ${owner}`)
     const repos = await kit.paginate(kit.rest.repos.listForOrg, {
@@ -42,7 +43,7 @@ export async function createRepoList(
     core.info(`Found ${repos.length} repos`)
     for (const repo of repos) {
       core.info(`repo name: ${repo.name}`)
-      await generateSBOM(kit, owner, repo.name)
+      await generateSBOM(kit, owner, repo.name, 'org')
     }
   }
 }
@@ -50,7 +51,8 @@ export async function createRepoList(
 export async function generateSBOM(
   kit: Octokit,
   owner: string,
-  repo?: string,
+  repo: string,
+  type?: string
 ): Promise<void> {
 
   try {
@@ -71,6 +73,11 @@ export async function generateSBOM(
         const e = wrapError(err)
         core.setFailed(e.message)
       } else {
+        if (type === 'repo') {
+          core.setOutput('fileName', fileName)
+        } else if (type === 'org') {
+          core.setOutput('fileName', `sbom-${owner}-*.json`)
+        }
         core.info(`SBOM written to ${fileName}`)
       }
     })
