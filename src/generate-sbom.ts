@@ -1,6 +1,6 @@
 import * as core from '@actions/core'
 import {Octokit} from 'octokit'
-import fs from 'fs'
+import * as fs from 'fs'
 import {wrapError} from './utils'
 
 export async function generateSBOM(
