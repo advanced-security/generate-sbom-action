@@ -63,15 +63,12 @@ describe('generateSBOMForOrg', () => {
     // repo is supposed to be undefined
     await createRepoList(token, owner, repo, <any>octokit)
 
-    expect(octokit.paginate).toHaveBeenCalledWith(
-      'GET /orgs/{owner}/repos',
-      {
+    expect(octokit.paginate).toHaveBeenCalledWith('GET /orgs/{owner}/repos', {
         owner,
         headers: {
           'X-GitHub-Api-Version': '2022-11-28'
         }
-      }
-    )
+    })
     
     // TODO: this fails b/c no repos are returned in the above mock
     expect(fs.writeFile).toHaveBeenCalledWith(

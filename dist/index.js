@@ -66,8 +66,11 @@ function createRepoList(token, owner, repo, octokit) {
         }
         else {
             core.info(`org name: ${owner}`);
-            const repos = yield kit.paginate(kit.rest.repos.listForOrg, {
-                org: owner
+            const repos = yield kit.paginate('GET /orgs/{owner}/repos', {
+                owner,
+                headers: {
+                    'X-GitHub-Api-Version': '2022-11-28'
+                }
             });
             core.info(`Found ${repos.length} repos`);
             for (const orgRepo of repos) {
