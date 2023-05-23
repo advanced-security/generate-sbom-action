@@ -43,13 +43,20 @@ export async function createRepoList(
     await generateSBOM(owner, repo, kit, 'repo')
   } else {
     core.info(`org name: ${owner}`)
-    const repos = await kit.paginate(kit.rest.repos.listForOrg, {
-      org: owner
-    })
+    const repos = await kit.paginate(
+      'GET /orgs/{owner}/repos',
+      {
+        owner,
+        headers: {
+          'X-GitHub-Api-Version': '2022-11-28'
+        }
+      }
+    )
     core.info(`Found ${repos.length} repos`)
-    for (const orgRepo of repos) {
-      core.info(`repo name: ${orgRepo.name}`)
-      await generateSBOM(owner, orgRepo.name, kit, 'org')
+
+    for (const repo of repos as {name: string}[]) {
+      core.info(`repo name: ${repo.name}`)
+      await generateSBOM(owner, repo.name, kit, 'org')
     }
   }
 }
