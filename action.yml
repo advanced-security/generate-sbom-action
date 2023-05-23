@@ -9,9 +9,13 @@ inputs:
     required: false
     description: 'GitHub token with permissions to read SBOM'
     default: ${{ github.token }}
+  resource:
+    required: true
+    description: 'Specify either a repo or an org to pull SBOMs for; defaults to current repo'
+    default: ${{ github.repository }}
 outputs:
   fileName:
-    description: The filename of the SBOM generated
+    description: The filename of the SBOM generated; if org is specified, this will return a pattern
 runs:
   using: 'node16'
   main: 'dist/index.js'

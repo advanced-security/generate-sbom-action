@@ -98,3 +98,6 @@ Thumbs.db
 __tests__/runner/*
 __test__/*.js
 lib/**/*
+
+# Ignore compiled js files
+src/*.js

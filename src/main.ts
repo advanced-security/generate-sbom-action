@@ -1,16 +1,15 @@
 import * as core from '@actions/core'
-import {generateSBOM} from './generate-sbom'
-import {getRequiredEnvParam, wrapError} from './utils'
+import {createRepoList} from './generate-sbom'
+import {wrapError} from './utils'
 
 async function run(): Promise<void> {
   try {
     const token: string = core.getInput('token')
-    const repo_owner: string = getRequiredEnvParam('GITHUB_REPOSITORY')
-    const [owner, repo] = repo_owner.split('/')
-    const sha = getRequiredEnvParam('GITHUB_SHA')
+    const resource: string = core.getInput('resource')
+    const [owner, repo] = resource.split('/')
 
     core.debug(new Date().toTimeString())
-    await generateSBOM(token, owner, repo, sha)
+    await createRepoList(token, owner, repo)
     core.debug(new Date().toTimeString())
   } catch (error) {
     core.setFailed(wrapError(error).message)
