@@ -13,5 +13,5 @@ outputs:
   fileName:
     description: The filename of the SBOM generated
 runs:
-  using: 'node16'
+  using: 'node20'
   main: 'dist/index.js'
