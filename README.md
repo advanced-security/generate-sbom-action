@@ -14,10 +14,10 @@ You can use the workflow as follows:
 gen-sbom:
   runs-on: ubuntu-latest
   steps:
-  - uses: actions/checkout@v3
+  - uses: actions/checkout@v4
   - uses: advanced-security/generate-sbom-action@v1
     id: gensbom
-  - uses: actions/upload-artifact@v3
+  - uses: actions/upload-artifact@v4
     with:
       name: sbom
       path: ${{ steps.gensbom.outputs.fileName }}
