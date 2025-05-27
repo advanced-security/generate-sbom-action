@@ -1,4 +1,4 @@
-require('./sourcemap-register.js');/******/ (() => { // webpackBootstrap
+/******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
 /***/ 586:
@@ -14091,4 +14091,3 @@ var dist_bundle_OAuthApp = OAuthApp.defaults({ Octokit });
 /******/ 	
 /******/ })()
 ;
-//# sourceMappingURL=index.js.map
