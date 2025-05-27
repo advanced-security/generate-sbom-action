@@ -12,10 +12,12 @@ jest.mock('octokit', () => ({
 const mockSBOM = fs.readFileSync('./__tests__/mock-sbom.json', 'utf-8')
 
 // Mock fs.writeFile
-const mockWriteFile = jest.spyOn(fs, 'writeFile').mockImplementation((f, d, callback: any) => {
-  console.log('[mock] writing file')
-  callback(null)
-})
+const mockWriteFile = jest
+  .spyOn(fs, 'writeFile')
+  .mockImplementation((f, d, callback: any) => {
+    console.log('[mock] writing file')
+    callback(null)
+  })
 
 describe('generateSBOM', () => {
   beforeEach(() => {
