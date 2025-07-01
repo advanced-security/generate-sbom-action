@@ -30,7 +30,7 @@
     "octokit": "^5.0.3"
   },
   "devDependencies": {
-    "@types/jest": "^29.5.3",
+    "@types/jest": "^30.0.0",
     "@typescript-eslint/eslint-plugin": "^8.35.1",
     "@typescript-eslint/parser": "^8.35.1",
     "@vercel/ncc": "^0.38.3",
@@ -38,7 +38,7 @@
     "eslint-plugin-github": "^6.0.0",
     "eslint-plugin-jest": "^28.11.0",
     "eslint-plugin-prettier": "^5.4.0",
-    "jest": "^29.6.1",
+    "jest": "^30.0.3",
     "js-yaml": "^4.1.0",
     "prettier": "^3.0.0",
     "ts-jest": "^29.3.4",
