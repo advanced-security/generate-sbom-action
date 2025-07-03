@@ -10,8 +10,8 @@
     "format-check": "prettier --check '**/*.ts'",
     "lint": "eslint src/**/*.ts",
     "package": "ncc build lib/main.js --license licenses.txt",
-    "test": "jest",
-    "btest": "npm run build & jest",
+    "test": "vitest run",
+    "btest": "npm run build & vitest run",
     "all": "npm run build && npm run format && npm run lint && npm run package && npm test"
   },
   "repository": {
@@ -30,19 +30,19 @@
     "octokit": "^5.0.3"
   },
   "devDependencies": {
-    "@types/jest": "^29.5.3",
+    "@types/node": "^24.0.10",
     "@typescript-eslint/eslint-plugin": "^8.35.1",
     "@typescript-eslint/parser": "^8.35.1",
     "@vercel/ncc": "^0.38.3",
+    "@vitest/ui": "^3.2.4",
     "eslint": "^9.27.0",
     "eslint-plugin-github": "^6.0.0",
-    "eslint-plugin-jest": "^28.11.0",
     "eslint-plugin-prettier": "^5.4.0",
-    "jest": "^29.6.1",
+    "eslint-plugin-vitest": "^0.5.4",
     "js-yaml": "^4.1.0",
     "prettier": "^3.0.0",
-    "ts-jest": "^29.3.4",
     "typescript": "^5.2.2",
-    "typescript-eslint": "^8.35.1"
+    "typescript-eslint": "^8.35.1",
+    "vitest": "^3.2.4"
   }
 }

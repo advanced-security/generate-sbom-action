@@ -1,18 +1,18 @@
-import {describe, expect, jest, it, beforeEach} from '@jest/globals'
+import {describe, expect, vi, it, beforeEach} from 'vitest'
 import {generateSBOM} from '../src/generate-sbom'
 import fs from 'fs'
 
 // Mock the Octokit import
-jest.mock('octokit', () => ({
-  Octokit: jest.fn().mockImplementation(() => ({
-    request: jest.fn()
+vi.mock('octokit', () => ({
+  Octokit: vi.fn().mockImplementation(() => ({
+    request: vi.fn()
   }))
 }))
 
 const mockSBOM = fs.readFileSync('./__tests__/mock-sbom.json', 'utf-8')
 
 // Mock fs.writeFile
-const mockWriteFile = jest
+const mockWriteFile = vi
   .spyOn(fs, 'writeFile')
   .mockImplementation((f, d, callback: any) => {
     console.log('[mock] writing file')
@@ -21,7 +21,7 @@ const mockWriteFile = jest
 
 describe('generateSBOM', () => {
   beforeEach(() => {
-    jest.clearAllMocks()
+    vi.clearAllMocks()
   })
 
   it('should retrieve the SBOM for a repository', async () => {
@@ -31,7 +31,7 @@ describe('generateSBOM', () => {
     const sha = 'fe43fdf'
 
     // Create a mock Octokit instance
-    const mockRequest = (jest.fn() as any).mockResolvedValue({
+    const mockRequest = (vi.fn() as any).mockResolvedValue({
       data: {
         sbom: JSON.parse(mockSBOM)
       }
