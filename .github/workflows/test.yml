@@ -28,7 +28,7 @@ jobs:
         name: Generate the SBOM
       - run: ls -la
       - run: echo ${{ steps.gensbom.outputs.fileName }}
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v6
         with:
           name: sbom
           path: ${{ steps.gensbom.outputs.fileName }}
