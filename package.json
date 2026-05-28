@@ -26,14 +26,14 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@actions/core": "^1.11.1",
+    "@actions/core": "^2.0.3",
     "octokit": "^5.0.3"
   },
   "devDependencies": {
     "@types/node": "^24.0.10",
     "@typescript-eslint/eslint-plugin": "^8.35.1",
     "@typescript-eslint/parser": "^8.35.1",
-    "@vercel/ncc": "^0.38.3",
+    "@vercel/ncc": "^0.38.4",
     "@vitest/ui": "^3.2.4",
     "eslint": "^9.27.0",
     "eslint-plugin-github": "^6.0.0",
