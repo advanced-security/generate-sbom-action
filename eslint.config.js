@@ -1,14 +1,14 @@
 // ESLint v9+ flat config migration from .eslintrc.json
 import js from '@eslint/js';
 import github from 'eslint-plugin-github';
-import jest from 'eslint-plugin-jest';
+import vitest from 'eslint-plugin-vitest';
 import tseslint from 'typescript-eslint';
 import prettier from 'eslint-plugin-prettier';
 
 export default [
   // Global ignores (must be first)
   {
-    ignores: ['dist/**', 'lib/**', 'node_modules/**', 'jest.config.js']
+    ignores: ['dist/**', 'lib/**', 'node_modules/**', 'vitest.config.ts']
   },
   
   // Base configurations
@@ -21,7 +21,7 @@ export default [
     plugins: {
       '@typescript-eslint': tseslint.plugin,
       github,
-      jest,
+      vitest,
       prettier,
     },
     languageOptions: {
