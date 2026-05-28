@@ -26,8 +26,8 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@actions/core": "^2.0.3",
-    "octokit": "^5.0.3"
+    "@actions/core": "^3.0.1",
+    "octokit": "^5.0.5"
   },
   "devDependencies": {
     "@types/node": "^24.0.10",
