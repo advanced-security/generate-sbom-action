@@ -30,19 +30,19 @@
     "octokit": "^5.0.3"
   },
   "devDependencies": {
-    "@types/node": "^24.0.10",
-    "@typescript-eslint/eslint-plugin": "^8.35.1",
-    "@typescript-eslint/parser": "^8.35.1",
-    "@vercel/ncc": "^0.38.3",
-    "@vitest/ui": "^3.2.4",
-    "eslint": "^9.27.0",
+    "@types/node": "^25.9.1",
+    "@typescript-eslint/eslint-plugin": "^8.60.0",
+    "@typescript-eslint/parser": "^8.60.0",
+    "@vercel/ncc": "^0.38.4",
+    "@vitest/ui": "^4.1.7",
+    "eslint": "^10.4.0",
     "eslint-plugin-github": "^6.0.0",
-    "eslint-plugin-prettier": "^5.4.0",
+    "eslint-plugin-prettier": "^5.5.5",
     "eslint-plugin-vitest": "^0.5.4",
-    "js-yaml": "^4.1.0",
-    "prettier": "^3.0.0",
-    "typescript": "^5.2.2",
+    "js-yaml": "^4.1.1",
+    "prettier": "^3.8.3",
+    "typescript": "^6.0.3",
     "typescript-eslint": "^8.35.1",
-    "vitest": "^3.2.4"
+    "vitest": "^4.1.7"
   }
 }
