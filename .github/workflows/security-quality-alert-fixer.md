@@ -19,6 +19,8 @@ tools:
   edit:
 network:
   allowed: [defaults, github, node]
+features:
+  copilot-requests: true
 safe-outputs:
   create-pull-request:
     title-prefix: "[agentic] "
