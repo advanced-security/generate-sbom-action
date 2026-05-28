@@ -1,6 +1,7 @@
 import {describe, expect, vi, it, beforeEach} from 'vitest'
 import {generateSBOM} from '../src/generate-sbom'
 import fs from 'fs'
+import fsPromises from 'fs/promises'
 
 // Mock the Octokit import
 vi.mock('octokit', () => ({
@@ -13,11 +14,10 @@ const mockSBOM = fs.readFileSync('./__tests__/mock-sbom.json', 'utf-8')
 
 // Mock fs.writeFile
 const mockWriteFile = vi
-  .spyOn(fs, 'writeFile')
-  .mockImplementation((f, d, callback: any) => {
+  .spyOn(fsPromises, 'writeFile')
+  .mockImplementation((async () => {
     console.log('[mock] writing file')
-    callback(null)
-  })
+  }) as any)
 
 describe('generateSBOM', () => {
   beforeEach(() => {
@@ -56,8 +56,31 @@ describe('generateSBOM', () => {
 
     expect(mockWriteFile).toHaveBeenCalledWith(
       `sbom-${owner}-${repo}-${sha}.json`,
-      JSON.stringify(JSON.parse(mockSBOM)),
-      expect.any(Function)
+      JSON.stringify(JSON.parse(mockSBOM))
     )
+  })
+
+  it('should reject unsafe file name characters', async () => {
+    const mockRequest = (vi.fn() as any).mockResolvedValue({
+      data: {
+        sbom: JSON.parse(mockSBOM)
+      }
+    })
+
+    const mockOctokit = {
+      request: mockRequest
+    }
+
+    await expect(
+      generateSBOM(
+        'test-token',
+        'octocat',
+        '../hello-world',
+        'fe43fdf',
+        mockOctokit as any
+      )
+    ).rejects.toThrow('repo contains unsupported characters')
+
+    expect(mockWriteFile).not.toHaveBeenCalled()
   })
 })
