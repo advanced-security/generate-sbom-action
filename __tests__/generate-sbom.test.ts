@@ -1,27 +1,27 @@
-import {describe, expect, jest, it, beforeEach} from '@jest/globals'
+import {describe, expect, vi, it, beforeEach} from 'vitest'
 import {generateSBOM} from '../src/generate-sbom'
 import fs from 'fs'
+import fsPromises from 'fs/promises'
 
 // Mock the Octokit import
-jest.mock('octokit', () => ({
-  Octokit: jest.fn().mockImplementation(() => ({
-    request: jest.fn()
+vi.mock('octokit', () => ({
+  Octokit: vi.fn().mockImplementation(() => ({
+    request: vi.fn()
   }))
 }))
 
 const mockSBOM = fs.readFileSync('./__tests__/mock-sbom.json', 'utf-8')
 
 // Mock fs.writeFile
-const mockWriteFile = jest
-  .spyOn(fs, 'writeFile')
-  .mockImplementation((f, d, callback: any) => {
+const mockWriteFile = vi
+  .spyOn(fsPromises, 'writeFile')
+  .mockImplementation((async () => {
     console.log('[mock] writing file')
-    callback(null)
-  })
+  }) as any)
 
 describe('generateSBOM', () => {
   beforeEach(() => {
-    jest.clearAllMocks()
+    vi.clearAllMocks()
   })
 
   it('should retrieve the SBOM for a repository', async () => {
@@ -31,7 +31,7 @@ describe('generateSBOM', () => {
     const sha = 'fe43fdf'
 
     // Create a mock Octokit instance
-    const mockRequest = (jest.fn() as any).mockResolvedValue({
+    const mockRequest = (vi.fn() as any).mockResolvedValue({
       data: {
         sbom: JSON.parse(mockSBOM)
       }
@@ -56,8 +56,31 @@ describe('generateSBOM', () => {
 
     expect(mockWriteFile).toHaveBeenCalledWith(
       `sbom-${owner}-${repo}-${sha}.json`,
-      JSON.stringify(JSON.parse(mockSBOM)),
-      expect.any(Function)
+      JSON.stringify(JSON.parse(mockSBOM))
     )
+  })
+
+  it('should reject unsafe file name characters', async () => {
+    const mockRequest = (vi.fn() as any).mockResolvedValue({
+      data: {
+        sbom: JSON.parse(mockSBOM)
+      }
+    })
+
+    const mockOctokit = {
+      request: mockRequest
+    }
+
+    await expect(
+      generateSBOM(
+        'test-token',
+        'octocat',
+        '../hello-world',
+        'fe43fdf',
+        mockOctokit as any
+      )
+    ).rejects.toThrow('repo contains unsupported characters')
+
+    expect(mockWriteFile).not.toHaveBeenCalled()
   })
 })
