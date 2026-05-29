@@ -3,6 +3,7 @@
     "target": "ES2020",                       /* Specify ECMAScript target version */
     "module": "CommonJS",                     /* Specify module code generation for Node.js compatibility */
     "moduleResolution": "node",               /* Use Node.js-style module resolution */
+    "ignoreDeprecations": "6.0",             /* Keep TypeScript 6 compatibility for node10 module resolution alias */
     "outDir": "./lib",                        /* Redirect output structure to the directory */
     "rootDir": "./src",                       /* Specify the root directory of input files */
     "strict": true,                           /* Enable all strict type-checking options */
@@ -12,6 +13,7 @@
     "skipLibCheck": true,                     /* Skip type checking of declaration files */
     "forceConsistentCasingInFileNames": true, /* Disallow inconsistently-cased references to the same file */
     "resolveJsonModule": true,                /* Include modules imported with '.json' extension */
+    "types": ["node"],                        /* Include Node.js ambient types */
     "lib": ["ES2020"]                         /* Specify library files to be included in the compilation */
   },
   "exclude": ["node_modules", "**/*.test.ts", "vitest.config.ts"]
