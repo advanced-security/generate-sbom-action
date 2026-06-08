@@ -2,8 +2,7 @@
 name: Security and Quality Alert Fixer
 description: Triage open security and quality alerts and create a pull request with fixes.
 on:
-  schedule:
-    - cron: "0 9 * * 5"
+  schedule: weekly on friday around 09:00
   workflow_dispatch:
 permissions:
   actions: read
@@ -29,7 +28,6 @@ safe-outputs:
     labels: [security, quality, automated]
     draft: true
     if-no-changes: warn
-    fallback-as-issue: false
     protected-files: allowed
     allowed-files:
       - "src/**"
