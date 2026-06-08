@@ -1,23 +1,25 @@
-version: 2
 updates:
-  - package-ecosystem: github-actions
-    directory: /
-    schedule:
-      interval: daily
-    cooldown:
-      default-days: 3
-    groups:
-      actions:
-        patterns: ["*"]
-
-  - package-ecosystem: npm
-    directory: /
-    schedule:
-      interval: daily
-    cooldown:
-      default-days: 3
-    groups:
-      production-dependencies:
-        dependency-type: "production"
-      development-dependencies:
-        dependency-type: "development"
+- cooldown:
+    default-days: 3
+  directory: /
+  groups:
+    actions:
+      patterns:
+      - "*"
+  ignore:
+  - dependency-name: "github/gh-aw-actions/**" # Managed by gh aw compile. Version-locked to the gh-aw compiler; do not bump.
+  package-ecosystem: github-actions
+  schedule:
+    interval: daily
+- cooldown:
+    default-days: 3
+  directory: /
+  groups:
+    development-dependencies:
+      dependency-type: development
+    production-dependencies:
+      dependency-type: production
+  package-ecosystem: npm
+  schedule:
+    interval: daily
+version: 2

@@ -29,6 +29,7 @@ safe-outputs:
     labels: [security, quality, automated]
     draft: true
     if-no-changes: warn
+    fallback-as-issue: false
     protected-files: allowed
     allowed-files:
       - "src/**"
