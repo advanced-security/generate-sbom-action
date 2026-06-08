@@ -11,6 +11,7 @@ permissions:
   issues: read
   pull-requests: read
   security-events: read
+  vulnerability-alerts: read
 tools:
   github:
     mode: gh-proxy
