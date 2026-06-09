@@ -11,6 +11,7 @@ permissions:
   pull-requests: read
   security-events: read
   vulnerability-alerts: read
+  copilot-requests: write
 tools:
   github:
     mode: gh-proxy
@@ -19,8 +20,6 @@ tools:
   edit:
 network:
   allowed: [defaults, github, node]
-features:
-  copilot-requests: true
 safe-outputs:
   create-pull-request:
     title-prefix: "[agentic] "
