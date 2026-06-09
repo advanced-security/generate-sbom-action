@@ -22,6 +22,8 @@ network:
   allowed: [defaults, github, node]
 safe-outputs:
   create-pull-request:
+    max: 1
+    expires: 7
     title-prefix: "[agentic] "
     branch-prefix: "agentic/security-quality-alert-fixer/"
     labels: [security, quality, automated]
@@ -69,7 +71,7 @@ Triage all open Security and Quality alerts in `${{ github.repository }}` and cr
 5. Create a pull request with the `create-pull-request` safe output:
    - Use a clear title that summarizes the alert classes fixed.
    - Include a checklist of alerts addressed, validation commands run, and any alerts that could not be fixed.
-   - Keep the pull request as a draft if any alert remains unresolved or validation could not complete.
+   - Set `draft` to `true`; this workflow always creates draft pull requests.
 
 ## Security
 
