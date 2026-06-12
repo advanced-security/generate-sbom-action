@@ -23,7 +23,7 @@ network:
 safe-outputs:
   create-pull-request:
     max: 1
-    expires: 7
+    expires: 7d
     title-prefix: "[agentic] "
     branch-prefix: "agentic/security-quality-alert-fixer/"
     labels: [security, quality, automated]
