@@ -1,6 +1,6 @@
 import * as core from '@actions/core'
-import {generateSBOM} from './generate-sbom'
-import {getRequiredEnvParam, wrapError} from './utils'
+import {generateSBOM} from './generate-sbom.js'
+import {getRequiredEnvParam, wrapError} from './utils.js'
 
 async function run(): Promise<void> {
   try {
