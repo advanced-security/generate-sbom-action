@@ -2,7 +2,7 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "module": "ESNext",
-    "moduleResolution": "node",
+    "moduleResolution": "Bundler",
     "target": "ES2020",
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,

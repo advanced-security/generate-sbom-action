@@ -2,7 +2,7 @@ import * as core from '@actions/core'
 import {Octokit} from 'octokit'
 import fs from 'fs/promises'
 import path from 'path'
-import {wrapError} from './utils'
+import {wrapError} from './utils.js'
 
 const safeFileNameCharacters = /^[A-Za-z0-9._-]+$/
 
